@@ -6,7 +6,8 @@ from flask_cors import CORS
 app = Flask(__name__)
 
 # Permitir solicitudes CORS desde cualquier origen
-CORS(app, resources={r"/*": {"origins": "*"}})
+CORS(app, resources={r"/*": {"origins": "https://gestionsalud.netlify.app"}})  
+
 
 # Configuración de la conexión a la base de datos MySQL
 db_config = {
