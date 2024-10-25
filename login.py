@@ -1,24 +1,26 @@
-from flask import Flask, request, jsonify, render_template
+from flask import Flask, request, jsonify
 from flask_cors import CORS
 import mysql.connector
+from flask import Flask, render_template
 import os
 
-# Crear una instancia de la aplicación Flask
 app = Flask(__name__)
-CORS(app)  # Permitir solicitudes CORS desde cualquier origen
 
+@app.route('/')
+def home():
+    return render_template('1.login.html')
+
+app = Flask(__name__)
+CORS(app)  
 # Configuración de la base de datos
+
 db_config = {
     'host': os.getenv('DB_HOST', 'localhost'),
     'user': os.getenv('DB_USER', 'root'),
     'password': os.getenv('DB_PASS', 'password'),
     'database': os.getenv('DB_NAME', 'gestion')
-}
+} 
 
-# Ruta de inicio
-@app.route('/')
-def home():
-    return render_template('1.login.html')
 
 # Función para verificar usuario en la base de datos
 def verificar_usuario(username, password):
@@ -34,8 +36,6 @@ def verificar_usuario(username, password):
     conn.close()
     
     return user
-
-# Ruta para iniciar sesión
 @app.route('/login', methods=['POST'])
 def login():
     data = request.get_json()
@@ -46,11 +46,17 @@ def login():
     user = verificar_usuario(username, password)
 
     if user:
-        # Puedes manejar la lógica específica para cada rol aquí si es necesario
+        if user['role'] == 'admisiones':
+            # Hacer algo específico para admisiones
+            pass
+        elif user['role'] == 'servicios':
+            # Hacer algo específico para servicios
+            pass
         return jsonify(access_token='dummy_token', role=user['role']), 200
     else:
         return jsonify(message='Credenciales incorrectas'), 401
 
-# Iniciar la aplicación
+    
+
 if __name__ == '__main__':
     app.run(debug=True, port=8080)
