@@ -5,6 +5,8 @@ from flask import Flask, render_template
 import os
 
 app = Flask(__name__)
+CORS(app, resources={r"/*": {"origins": "https://gestionsalud.netlify.app"}})  
+
 
 @app.route('/')
 def home():
